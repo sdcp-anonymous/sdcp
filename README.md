@@ -1,6 +1,6 @@
 # SDCP: Self-Distilled Contrastive Priors for Label-Free RAG
 
-Code for the paper **"SDCP: Self-Distilled Contrastive Priors for Label-Free Retrieval-Augmented Generation"**, submitted to EMNLP 2026 (under double-blind review).
+Code for the paper **"SDCP: Self-Distilled Contrastive Priors for Label-Free Retrieval-Augmented Generation"**, under anonymous peer review.
 
 > **Note:** This repository is anonymized for peer review. Author information will be added upon acceptance.
 
