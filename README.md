@@ -1,79 +1,91 @@
-# SDCP
+# SDCP: Self-Distilled Contrastive Priors for Label-Free RAG
 
-A modern, open-source project for software development and collaboration.
+Code for the paper **"SDCP: Self-Distilled Contrastive Priors for Label-Free Retrieval-Augmented Generation"**, submitted to EMNLP 2026 (under double-blind review).
 
-## About
-
-SDCP is a community-driven project designed to provide a robust foundation for building and managing scalable applications. This repository serves as a central hub for development, documentation, and collaboration.
-
-## Features
-
-- **Easy to use**: Simple setup and configuration
-- **Well documented**: Comprehensive guides and examples
-- **Open source**: Built by and for the community
-- **Modular architecture**: Extensible and customizable components
-- **Best practices**: Follows industry standards and conventions
-
-## Getting Started
-
-### Prerequisites
-
-Before you begin, ensure you have the following installed:
-- Git
-- Your preferred development environment
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/weblogweblog3-oss/sdcp.git
-cd sdcp
-```
-
-2. Set up your environment:
-```bash
-# Add setup instructions here
-```
-
-3. Start developing:
-```bash
-# Add startup instructions here
-```
-
-## Usage
-
-Add usage examples and code snippets here.
-
-## Contributing
-
-We welcome contributions from the community! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-Please make sure to:
-- Follow the existing code style
-- Add tests for new functionality
-- Update documentation as needed
-
-## License
-
-This project is open source and available under the [license of your choice]. See the LICENSE file for more details.
-
-## Support
-
-For questions, issues, or suggestions, please:
-- Open an [issue](https://github.com/weblogweblog3-oss/sdcp/issues)
-- Start a [discussion](https://github.com/weblogweblog3-oss/sdcp/discussions)
-- Check the [wiki](https://github.com/weblogweblog3-oss/sdcp/wiki)
-
-## Acknowledgments
-
-Thanks to all our contributors and the open-source community!
+> **Note:** This repository is anonymized for peer review. Author information will be added upon acceptance.
 
 ---
 
-**Last updated**: May 24, 2026
+## Requirements
+
+- Python 3.10+
+- PyTorch 2.x (CUDA 11.8+)
+- transformers >= 4.39
+- sentence-transformers
+- rouge-score, scipy, numpy, pandas, tqdm
+
+```bash
+pip install torch transformers sentence-transformers rouge-score scipy numpy pandas tqdm
+```
+
+---
+
+## Models
+
+| Experiment | Model | Quantization |
+|-----------|-------|-------------|
+| Main results (Table 1) | Mistral-7B-Instruct-v0.2 | 4-bit NF4 (bitsandbytes) |
+| Generalization (Table 2) | Mistral-7B-Instruct-v0.2 | 4-bit NF4 |
+
+---
+
+## Repository Structure
+
+```
+├── notebooks/          # Jupyter notebooks for all experiments
+│   ├── SDCP_Method.ipynb               # Core SDCP method
+│   ├── Full_Dataset_4bit.ipynb         # Main results (Table 1)
+│   ├── SDCP_v2_AlwaysUncertain.ipynb   # SDCP-v2 variant
+│   ├── SDCP_HyDE_Comparison.ipynb      # HyDE baseline comparison
+│   ├── ARC_Base_Baseline.ipynb         # Base RAG on ARC-Challenge
+│   ├── ICL1D_Plus_Baseline.ipynb       # Li et al. ICL baselines
+│   ├── SDCP_Ablation.ipynb             # Component ablation (Table 3)
+│   ├── SDCP_HyperparamAblation.ipynb   # Hyperparameter sensitivity
+│   ├── SDCP_WikipediaKB.ipynb          # Wikipedia KB generalization
+│   └── CFR_CAFD_WikipediaKB.ipynb      # CFR/CAFD-LC with Wikipedia KB
+│
+└── scripts/            # Python scripts for reproducible runs
+    ├── run_sdcp_v2.py                  # SDCP-v2 runner
+    ├── ablation_sdcpv2.py              # Ablation on TQA/MMLU
+    ├── ablation_arc_sdcpv2.py          # Ablation on ARC-Challenge
+    ├── multi_seed_sdcp_v2_correct.py   # Multi-seed robustness (3 seeds)
+    └── stat_analysis.py               # Bootstrap CIs + Holm-corrected p-values
+```
+
+---
+
+## Reproducing Main Results (Table 1)
+
+Run `notebooks/Full_Dataset_4bit.ipynb` for all methods on TruthfulQA, MMLU, and ARC-Challenge.
+
+| Method | TQA R1 | MMLU R1 | ARC R1 |
+|--------|--------|---------|--------|
+| Base   | 26.81  | 10.42   | 42.33  |
+| HyDE   | 31.04  | 30.89   | 42.76  |
+| SDCP-v2 | **35.59** | **35.44** | 39.18 |
+
+---
+
+## Datasets
+
+| Dataset | Split | Size | License |
+|---------|-------|------|---------|
+| TruthfulQA | test | 615 | Apache 2.0 |
+| MMLU | test (28 subjects × 2) | 1,596 | MIT |
+| ARC-Challenge | test | 1,172 | Apache 2.0 |
+
+All datasets are publicly available benchmarks containing no personally identifiable information.
+
+---
+
+## Statistical Significance
+
+Bootstrap confidence intervals and Holm-Bonferroni corrected p-values are computed in `scripts/stat_analysis.py`.
+
+---
+
+## Notes
+
+- Update model checkpoint paths in notebooks before running (search for `/path/to/model`).
+- All scripts use a fixed random seed for reproducibility.
+- Notebook outputs are cleared for anonymization.
